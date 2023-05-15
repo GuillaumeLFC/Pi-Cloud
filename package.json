@@ -16,9 +16,5 @@
   "bugs": {
     "url": "https://github.com/GuillaumeLFC/Pi-Cloud/issues"
   },
-  "homepage": "https://github.com/GuillaumeLFC/Pi-Cloud#readme",
-  "dependencies": {
-    "ronin-mocks": "^0.1.11",
-    "ronin-server": "^0.1.3"
-  }
+  "homepage": "https://github.com/GuillaumeLFC/Pi-Cloud#readme"
 }
