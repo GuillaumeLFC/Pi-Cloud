@@ -1,15 +1,20 @@
 const express = require('express');
 const multer = require('multer');
-const path = require('path');
-
+const { Photos, generateid } = require('./photos.js');
 const app = express();
 
-const uploads = multer({dest : '/app/photos'});
+const storage = multer.diskStorage({
+    destination : "/photos",
+    filename : function (file, cb) {
+        const filename = generateid() + file.encoding;
+        cb (null, filename);
+    }
+});
 
-app.post('/',uploads.array('photos'),async (req, res) => {
-  console.log(req.fiedname);
-  console.log(req.originalname)
-  res.send('Heu ça a marché ?');
+const uploads = multer({dest : storage});
+
+app.post('/',uploads.array('photos'), async (req, res) => {
+    res.send('Bonne nuit frero normalement ça marche');
 });
 
 app.get('/',async (req, res) => {
