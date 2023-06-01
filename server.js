@@ -4,11 +4,16 @@ const path = require('path');
 
 const app = express();
 
-const uploads = multer({dest : '/photos'})
+const uploads = multer({dest : '/app/photos'});
 
-app.get
 app.post('/',uploads.array('photos'),async (req, res) => {
-  res.send('Heu ça a marché ?')
+  console.log(req.fiedname);
+  console.log(req.originalname)
+  res.send('Heu ça a marché ?');
+});
+
+app.get('/',async (req, res) => {
+  res.send("Serveur en ligne");
 });
 
 // Start the server
