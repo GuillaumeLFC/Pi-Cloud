@@ -1,6 +1,7 @@
-const express = require('express');
-const multer = require('multer');
-const { Photos, generateid } = require('./photos.js');
+import express from 'express';
+import multer from 'multer';
+import { Photo, generateid } from './photos.js';
+
 const app = express();
 
 const storage = multer.diskStorage({
@@ -15,7 +16,7 @@ const storage = multer.diskStorage({
 const uploads = multer({storage : storage});
 
 app.post('/',uploads.array('photos'), async (req, res) => {
-    const photo = new Photos()
+    const photo = new Photo()
     res.send('Photo uploadée et métadonnées extraites !');
 });
 
