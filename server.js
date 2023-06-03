@@ -4,17 +4,19 @@ const { Photos, generateid } = require('./photos.js');
 const app = express();
 
 const storage = multer.diskStorage({
-    destination : "/photos",
-    filename : function (file, cb) {
-        const filename = generateid() + file.encoding;
-        cb (null, filename);
+    destination : "./photos",
+    filename : function (req, file, cb) {
+        const filename = generateid() + '.jpg';
+        console.log(filename);
+        cb(null, filename);
     }
 });
 
-const uploads = multer({dest : storage});
+const uploads = multer({storage : storage});
 
 app.post('/',uploads.array('photos'), async (req, res) => {
-    res.send('Bonne nuit frero normalement ça marche');
+    const photo = new Photos()
+    res.send('Photo uploadée et métadonnées extraites !');
 });
 
 app.get('/',async (req, res) => {
