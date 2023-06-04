@@ -8,20 +8,24 @@ const storage = multer.diskStorage({
     destination : "./photos",
     filename : function (req, file, cb) {
         const filename = generateid() + '.jpg';
-        console.log(filename);
         cb(null, filename);
+        console.log(`${filename} uploadé `);
     }
 });
 
 const uploads = multer({storage : storage});
 
 app.post('/',uploads.array('photos'), async (req, res) => {
-    const photo = new Photo()
-    res.send('Photo uploadée et métadonnées extraites !');
+  req.files.forEach(file => {
+    res.send(file.filename)
+    const photo = new Photo(false, file.name);
+    const metadata = photo.extractmetadata(file.path);
+    console.log(metadata);   
+  });
 });
 
 app.get('/',async (req, res) => {
-  res.send("Serveur en ligne");
+  res.send("Serveur en ligne sur le localhost");
 });
 
 // Start the server

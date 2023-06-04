@@ -11,17 +11,21 @@ const storage = multer_1.default.diskStorage({
     destination: "./photos",
     filename: function (req, file, cb) {
         const filename = (0, photos_js_1.generateid)() + '.jpg';
-        console.log(filename);
         cb(null, filename);
+        console.log(`${filename} uploadé `);
     }
 });
 const uploads = (0, multer_1.default)({ storage: storage });
 app.post('/', uploads.array('photos'), async (req, res) => {
-    const photo = new photos_js_1.Photo();
-    res.send('Photo uploadée et métadonnées extraites !');
+    req.files.forEach(file => {
+        res.send(file.filename);
+        const photo = new photos_js_1.Photo(false, file.name);
+        const metadata = photo.extractmetadata(file.path);
+        console.log(metadata);
+    });
 });
 app.get('/', async (req, res) => {
-    res.send("Serveur en ligne");
+    res.send("Serveur en ligne sur le localhost");
 });
 // Start the server
 const port = 3000;
