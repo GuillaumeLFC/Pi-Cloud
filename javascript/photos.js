@@ -11,17 +11,31 @@ class Photo {
             this.id = generateid();
         }
     }
-    extractmetadata(file) {
+    async extractmetadata(file) {
         try {
-            console.log(file);
-            const TagsToExtract = [0x011A, 0x011B, 0x0132, 0x013B, 0x0002, 0x0004, 0x0006, 0x9003];
-            const metadata = exifr_1.default.parse(file, TagsToExtract);
-            console.log(metadata);
+            const TagsToExtract = [0x0100, 0x0101, 0x011A, 0x011B, 0x9003, 0x0002, 0x0004, 0x9000];
+            const metadata = await exifr_1.default.parse(file, TagsToExtract);
             return metadata;
         }
         catch (error) {
             console.log(error);
         }
+    }
+    ;
+    savemetadata(metadata) {
+        //const metadata = JSON.parse(metadataJson);
+        console.log('before savemetadata : ');
+        console.log(metadata);
+        this.metadata.ImageWidth = metadata.ImageWidth;
+        this.metadata.ImageHeight = metadata.ImageHeight;
+        this.metadata.XResolution = metadata.XResolution;
+        this.metadata.YResolution = metadata.YResolution;
+        this.metadata.ExifVersion = metadata.ExifVersion;
+        this.metadata.DateTimeOriginal = metadata.DateTimeOriginal;
+        this.metadata.Latitude = metadata.latitude;
+        this.metadata.Longitude = metadata.longitude;
+        console.log('after savemetadata : ');
+        console.log(this.metadata);
     }
     ;
 }
