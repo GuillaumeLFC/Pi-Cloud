@@ -7,15 +7,15 @@ export class Photo {
     //Define metadata properties 
     //@ts-ignore
     metadata : {
-        ImageWidth : number;
-        ImageHeight : number;
-        XResolution : number;
-        YResolution : number;
-        ExifVersion : string;
-        DateTimeOriginal : string;
-        Latitude : number;
-        Longitude : number;
-    }
+        ImageWidth ?: number;
+        ImageHeight ?: number;
+        XResolution ?: number;
+        YResolution ?: number;
+        ExifVersion ?: string;
+        DateTimeOriginal ?: string;
+        Latitude ?: number;
+        Longitude ?: number;
+    };
 
     constructor (isNew = true, id = null) {
         if (isNew) {
