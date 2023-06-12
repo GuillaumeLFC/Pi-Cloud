@@ -10,6 +10,7 @@ class Photo {
         if (isNew) {
             this.id = generateid();
         }
+        this.metadata = {};
     }
     async extractmetadata(file) {
         try {
@@ -24,8 +25,6 @@ class Photo {
     ;
     savemetadata(metadata) {
         //const metadata = JSON.parse(metadataJson);
-        console.log('before savemetadata : ');
-        console.log(metadata);
         this.metadata.ImageWidth = metadata.ImageWidth;
         this.metadata.ImageHeight = metadata.ImageHeight;
         this.metadata.XResolution = metadata.XResolution;
@@ -34,8 +33,6 @@ class Photo {
         this.metadata.DateTimeOriginal = metadata.DateTimeOriginal;
         this.metadata.Latitude = metadata.latitude;
         this.metadata.Longitude = metadata.longitude;
-        console.log('after savemetadata : ');
-        console.log(this.metadata);
     }
     ;
 }

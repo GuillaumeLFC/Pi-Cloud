@@ -2,8 +2,9 @@ import exifr from 'exifr';
 
 
 export class Photo {
-    id!: string;
-    
+    id?: string;
+    filextension ?: string;
+
     //Define metadata properties 
     //@ts-ignore
     metadata : {
@@ -15,14 +16,14 @@ export class Photo {
         DateTimeOriginal ?: string;
         Latitude ?: number;
         Longitude ?: number;
-    };
+      };
 
     constructor (isNew = true, id = null) {
         if (isNew) {
             this.id = generateid()
         }
+        this.metadata = {};
     }
-
     async extractmetadata (file) {
         try {
             const TagsToExtract = [0x0100, 0x0101, 0x011A, 0x011B, 0x9003, 0x0002, 0x0004, 0x9000];
@@ -36,8 +37,6 @@ export class Photo {
     savemetadata (metadata) {
 
         //const metadata = JSON.parse(metadataJson);
-        console.log('before savemetadata : ');
-        console.log(metadata);
         this.metadata.ImageWidth = metadata.ImageWidth;
         this.metadata.ImageHeight = metadata.ImageHeight;
         this.metadata.XResolution = metadata.XResolution;
@@ -46,8 +45,6 @@ export class Photo {
         this.metadata.DateTimeOriginal = metadata.DateTimeOriginal;
         this.metadata.Latitude = metadata.latitude;
         this.metadata.Longitude = metadata.longitude;
-        console.log('after savemetadata : ');
-        console.log(this.metadata);
     };
 
 }

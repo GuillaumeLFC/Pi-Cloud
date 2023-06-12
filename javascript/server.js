@@ -10,10 +10,28 @@ const app = (0, express_1.default)();
 const storage = multer_1.default.diskStorage({
     destination: "/app/photos",
     filename: function (req, file, cb) {
-        const filename = (0, photos_js_1.generateid)() + '.jpg';
+        const filextension = extension(file);
+        const filename = (0, photos_js_1.generateid)() + filextension;
         cb(null, filename);
     }
 });
+function extension(file) {
+    const mimetype = file.mimetype;
+    if (mimetype === '/image/jpeg') {
+        return '.jpg';
+    }
+    else {
+        //à developper...
+        return '.jpg';
+    }
+}
+;
+function getextension(filename) {
+    if (filename.includes('.jpg')) {
+        return 'jpg';
+    } //à developper...
+}
+;
 const uploads = (0, multer_1.default)({
     storage: storage,
     limits: { fileSize: 10 * 1024 * 1024 }
@@ -21,10 +39,11 @@ const uploads = (0, multer_1.default)({
 app.post('/', uploads.array('photos'), async (req, res) => {
     req.files.forEach(async (file) => {
         const photo = new photos_js_1.Photo(false, file.name);
+        photo.filextension = getextension(file.filename);
         const metadata = await photo.extractmetadata(file.path);
         photo.savemetadata(metadata);
     });
-    res.send('Fichiers uploadés et metadonnées extraites');
+    res.send('Fichiers uploadés');
 });
 app.get('/', async (req, res) => {
     res.send("Serveur en ligne ");
