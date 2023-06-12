@@ -1,8 +1,8 @@
-version: '3'
+version: '3i'
 services:
-  node-server:
+  node-serveur:
     build:
-      context: ./Node-
+      context: ./node-serveur/
       dockerfile: Dockerfile
     ports:
       - '3000:3000'

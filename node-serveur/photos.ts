@@ -1,6 +1,5 @@
 import exifr from 'exifr';
 
-
 export class Photo {
     id?: string;
     filextension ?: string;
