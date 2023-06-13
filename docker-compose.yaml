@@ -1,27 +1,30 @@
-version: '3i'
+version: '3'
 services:
   node-serveur:
+    container_name: node-serveur
     build:
       context: ./node-serveur/
       dockerfile: Dockerfile
     ports:
       - '3000:3000'
     depends_on:
-      - mongo
+      - mongodb
     networks:
-      - app-network
+      - Pi-Cloud
+    environment:
+      - MONGODB_HOST=mongodb
+    deploy:
+      mode: global 
 
-  mongo:
-    image: mongo
-    ports:
-      - '27017:27017'
-    volumes:
-      - mongodata:/data/db
+  mongodb:
+    container_name: mongoDB
+    image: mongodb/mongodb-community-server:4.4.18-ubuntu2004-20230612T062709Z
     networks:
-      - app-network
+      - Pi-Cloud
 
 networks:
-  app-network:
-
+  Pi-Cloud:
+    driver: bridge
+    
 volumes:
-  mongodata:
+  mongoDB:
