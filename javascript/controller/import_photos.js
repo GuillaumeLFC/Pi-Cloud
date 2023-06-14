@@ -13,14 +13,20 @@ exports.importPhoto = void 0;
 const photos_1 = require("../utils/photos");
 function importPhoto(req, res) {
     req.files.forEach((file) => __awaiter(this, void 0, void 0, function* () {
-        const photo = new photos_1.Photo(false, file.name);
+        const photo = new photos_1.Photo(false, file.name, file.path);
+        handlemetadata(photo);
         photo.filextension = getextension(file.filename);
-        const metadata = yield photo.extractmetadata(file.path);
-        photo.savemetadata(metadata);
     }));
     res.send('Photos uploadées');
 }
 exports.importPhoto = importPhoto;
+;
+function handlemetadata(photo) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const metadata = yield photo.extractmetadata(photo.path);
+        photo.savemetadata(metadata);
+    });
+}
 ;
 function getextension(filename) {
     if (filename.includes('.jpg')) {

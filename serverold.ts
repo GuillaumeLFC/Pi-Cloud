@@ -13,6 +13,7 @@ const storage = multer.diskStorage({
     }
 });
 
+//Définit l'extension du fichier lors du premier enregistrement
 function extension (file) {
   const mimetype = file.mimetype;
   if (mimetype === '/image/jpeg') {
