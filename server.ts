@@ -43,9 +43,7 @@ app.post('/',uploads.array('photos'), async (req, res) => {
   });
 
   res.send('Fichiers uploadés');
-
 });
-
 
 app.get('/',async (req, res) => {
   res.send("Serveur en ligne ");
