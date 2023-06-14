@@ -10,8 +10,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
+const import_photos_1 = require("../controller/import_photos");
 const router = (0, express_1.Router)();
 router.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.send("Serveur en ligne !");
 }));
+router.post('/', import_photos_1.importPhoto, (req, res) => {
+});
 exports.default = router;

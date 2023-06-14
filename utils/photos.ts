@@ -3,6 +3,7 @@ import exifr from 'exifr';
 export class Photo {
     id?: string;
     filextension ?: string;
+    path ?: string;
 
     //Define metadata properties 
     //@ts-ignore
@@ -17,12 +18,15 @@ export class Photo {
         Longitude ?: number;
       };
 
-    constructor (isNew = true, id = null) {
+    constructor (isNew = true, id = null, path?) {
         if (isNew) {
             this.id = generateid()
-        }
+        };
+        if (path) {
+            this.path = path;
+        };
         this.metadata = {};
-    }
+    };
     async extractmetadata (file) {
         try {
             const TagsToExtract = [0x0100, 0x0101, 0x011A, 0x011B, 0x9003, 0x0002, 0x0004, 0x9000];
@@ -30,7 +34,7 @@ export class Photo {
             return metadata;
         } catch(error) {
             console.log(error);
-        }
+        };
     };
 
     savemetadata (metadata) {
