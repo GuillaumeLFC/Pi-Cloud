@@ -1,9 +1,9 @@
 version: '3'
 services:
   node-serveur:
-    container_name: node-serveur
+    container_name: serveur
     build:
-      context: ./node-serveur/
+      context: .
       dockerfile: Dockerfile
     ports:
       - '3000:3000'
