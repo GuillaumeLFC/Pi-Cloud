@@ -1,8 +1,9 @@
-import express from 'express';
+import { Router, Request, Response } from 'express';
 
-const app = express();
+const router = Router();
 
-app.get('/',async (req, res) => {
-    res.send("Serveur en ligne ");
+router.get('/',async (req : Request, res : Response) => {
+    res.send("Serveur en ligne !");
   });
-  
+
+export default router
