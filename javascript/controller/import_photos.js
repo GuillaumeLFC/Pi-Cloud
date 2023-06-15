@@ -12,12 +12,23 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.importPhoto = void 0;
 const photos_1 = require("../utils/photos");
 function importPhoto(req, res) {
-    req.files.forEach((file) => __awaiter(this, void 0, void 0, function* () {
-        const photo = new photos_1.Photo(false, file.name, file.path);
-        handlemetadata(photo);
-        photo.filextension = getextension(file.filename);
-    }));
-    res.send('Photos uploadées');
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            for (const file of req.files) {
+                const photo = new photos_1.Photo(false, file.name, file.path);
+                handlemetadata(photo);
+                photo.filextension = getextension(file.filename);
+            }
+            ;
+            console.log('Photo uploadée');
+            res.send('Photos uploadées');
+        }
+        catch (error) {
+            console.log(error);
+            res.send(error);
+        }
+        ;
+    });
 }
 exports.importPhoto = importPhoto;
 ;

@@ -1,14 +1,21 @@
 
 import { Photo } from "../utils/photos";
-import { uploadsPhotos } from "../middleware/multer/photos";
+import { Request, Response } from 'express';
 
-export function importPhoto(req , res) {
-    req.files.forEach(async file => {
-        const photo = new Photo(false, file.name, file.path);
-        handlemetadata(photo);
-        photo.filextension = getextension(file.filename); 
-      });
-    res.send('Photos uploadées')
+export async function importPhoto(req : Request , res : Response) {
+  try {
+    for (const file of req.files){
+      const photo = new Photo(false, file.name, file.path);
+      handlemetadata(photo);
+      photo.filextension = getextension(file.filename); 
+    };
+    console.log('Photo uploadée');
+    res.send('Photos uploadées');
+  } catch (error) {
+    console.log(error);
+    res.send(error);
+  };
+  
 };
 
 async function handlemetadata (photo,) {

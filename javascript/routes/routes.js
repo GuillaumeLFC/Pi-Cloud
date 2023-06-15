@@ -8,13 +8,37 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const import_photos_1 = require("../controller/import_photos");
+const photos_1 = require("../middleware/multer/photos");
+const multer_1 = __importDefault(require("multer"));
 const router = (0, express_1.Router)();
 router.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    res.send("Serveur en ligne !");
+    res.send("Serveur en ligne :)");
 }));
-router.post('/', import_photos_1.importPhoto, (req, res) => {
+router.post('/', photos_1.uploadsPhotos.array('photos'), (req, res) => {
+    if (req.files) {
+        res.send('req.files présent');
+        (0, import_photos_1.importPhoto)(req, res);
+    }
+    else {
+        res.send('req.file non présent');
+    }
 });
+// Error handling middleware for Multer
+const handleMulterError = (err, req, res, next) => {
+    if (err instanceof multer_1.default.MulterError) {
+        // Multer-specific error occurred (e.g., file size exceeded)
+        console.log(err.message);
+    }
+    else {
+        // Other generic errors occurred during file upload
+        console.log(err.message);
+    }
+};
+router.use(handleMulterError);
 exports.default = router;
