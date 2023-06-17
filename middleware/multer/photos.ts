@@ -6,6 +6,7 @@ const storage = multer.diskStorage({
     filename : function (req, file, cb) {
         const filextension = extensionfromfile(file);
         const filename = generateid() + filextension;
+        console.log(filename);
         cb(null, filename);
     }
 });
@@ -23,5 +24,5 @@ function extensionfromfile (file) {
 
 export const uploadsPhotos = multer({
     storage : storage,
-    limits : { fileSize : 10 * 1024 *1024 }
+    limits : { fileSize : 20 * 1024 *1024 }
   });
