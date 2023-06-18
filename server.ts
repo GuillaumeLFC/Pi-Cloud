@@ -1,8 +1,8 @@
 import express from 'express';
 import routes from './routes/routes';
 
-import { connectMongo } from './models/mongodb/connection';
-connectMongo();
+import { connectoMongo } from './models/mongodb/connection';
+connectoMongo();
 
 const app = express();
 

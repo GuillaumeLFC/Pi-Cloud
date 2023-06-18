@@ -6,7 +6,6 @@ const storage = multer.diskStorage({
     filename : function (req, file, cb) {
         const filextension = extensionfromfile(file);
         const filename = generateid() + filextension;
-        console.log(filename);
         cb(null, filename);
     }
 });

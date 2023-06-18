@@ -27,7 +27,7 @@ async function run() {
   }
 }
 
-export function connectMongo(){
+export function connectoMongo(){
     run().catch(console.dir);  
 }
 

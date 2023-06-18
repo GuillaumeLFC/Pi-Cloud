@@ -15,8 +15,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.generateid = exports.Photo = void 0;
 const exifr_1 = __importDefault(require("exifr"));
 class Photo {
-    constructor(isNew = true, id = null, path) {
-        if (isNew) {
+    constructor(id = null, path) {
+        if (id) {
+            this.id = id;
+        }
+        else {
             this.id = generateid();
         }
         ;
@@ -42,7 +45,6 @@ class Photo {
     }
     ;
     savemetadata(metadata) {
-        //const metadata = JSON.parse(metadataJson);
         this.metadata.ImageWidth = metadata.ImageWidth;
         this.metadata.ImageHeight = metadata.ImageHeight;
         this.metadata.XResolution = metadata.XResolution;

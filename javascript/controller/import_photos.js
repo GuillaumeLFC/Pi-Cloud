@@ -14,9 +14,9 @@ const photos_1 = require("../utils/photos");
 function importPhoto(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const photos = [];
             for (const file of req.files) {
-                const photo = new photos_1.Photo(false, file.name, file.path);
+                console.log(file.filename);
+                const photo = new photos_1.Photo(file.filename, file.path);
                 handlemetadata(photo);
                 photo.filextension = getextension(file.filename);
             }
@@ -39,6 +39,9 @@ function handlemetadata(photo) {
     });
 }
 ;
+function getIDfromfilename(filename) {
+    const ex;
+}
 function getextension(filename) {
     if (filename.includes('.jpg')) {
         return 'jpg';

@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.connectMongo = void 0;
+exports.connectoMongo = void 0;
 const { MongoClient, ServerApiVersion } = require("mongodb");
 // Replace the placeholder with your Atlas connection string
 const uri = "mongodb://mongo";
@@ -36,7 +36,7 @@ function run() {
         }
     });
 }
-function connectMongo() {
+function connectoMongo() {
     run().catch(console.dir);
 }
-exports.connectMongo = connectMongo;
+exports.connectoMongo = connectoMongo;

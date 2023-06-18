@@ -4,9 +4,9 @@ import { Request, Response } from 'express';
 
 export async function importPhoto(req : Request , res : Response) {
   try {
-    const photos = []
     for (const file of req.files){
-      const photo = new Photo(false, file.name, file.path);
+      const id = getIDfromfilename(file.filename)
+      const photo = new Photo(id, file.path);
       handlemetadata(photo);
       photo.filextension = getextension(file.filename); 
     };
@@ -14,8 +14,7 @@ export async function importPhoto(req : Request , res : Response) {
   } catch (error) {
     console.log(error);
     res.send(error);
-  };
-  
+  };  
 };
 
 async function handlemetadata (photo,) {
@@ -23,7 +22,15 @@ async function handlemetadata (photo,) {
     photo.savemetadata(metadata);  
 };
 
-function getextension (filename) {
+function getIDfromfilename (filename :string) :string {
+  const lastIndex = filename.lastIndexOf('.');
+  if (lastIndex === -1) {
+    return filename
+  };
+  return filename.slice(0, lastIndex);
+};
+
+function getextension (filename : string) {
     if (filename.includes('.jpg')) {
       return 'jpg'
     } //à developper...
