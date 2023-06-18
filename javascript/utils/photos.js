@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.generateid = exports.Photo = void 0;
 const exifr_1 = __importDefault(require("exifr"));
 class Photo {
-    constructor(id = null, path) {
+    constructor(id, path) {
         if (id) {
             this.id = id;
         }
@@ -26,7 +26,9 @@ class Photo {
         if (path) {
             this.path = path;
         }
-        ;
+        else {
+            throw "Path non renseigné lors de la création d'une instance Photo"; //Peut mieux faire
+        }
         this.metadata = {};
     }
     ;
@@ -53,6 +55,7 @@ class Photo {
         this.metadata.DateTimeOriginal = metadata.DateTimeOriginal;
         this.metadata.Latitude = metadata.latitude;
         this.metadata.Longitude = metadata.longitude;
+        this.DateAndTimeISO = metadata.DateTimeOriginal;
     }
     ;
 }

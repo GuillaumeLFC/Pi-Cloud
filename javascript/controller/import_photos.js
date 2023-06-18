@@ -15,8 +15,8 @@ function importPhoto(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             for (const file of req.files) {
-                console.log(file.filename);
-                const photo = new photos_1.Photo(file.filename, file.path);
+                const id = getIDfromfilename(file.filename);
+                const photo = new photos_1.Photo(id, file.path);
                 handlemetadata(photo);
                 photo.filextension = getextension(file.filename);
             }
@@ -40,11 +40,18 @@ function handlemetadata(photo) {
 }
 ;
 function getIDfromfilename(filename) {
-    const ex;
+    const lastIndex = filename.lastIndexOf('.');
+    if (lastIndex === -1) {
+        return filename;
+    }
+    ;
+    return filename.slice(0, lastIndex);
 }
+;
 function getextension(filename) {
     if (filename.includes('.jpg')) {
         return 'jpg';
-    } //à developper...
+    } //à developper
+    return 'jpg';
 }
 ;

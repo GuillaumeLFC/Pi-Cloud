@@ -1,12 +1,11 @@
 import exifr from 'exifr';
 
 export class Photo {
-    id?: string;
+    id: string;
     filextension ?: string;
-    path ?: string;
+    path : string;
 
     //Define metadata properties 
-    //@ts-ignore
     metadata : {
         ImageWidth ?: number;
         ImageHeight ?: number;
@@ -19,7 +18,7 @@ export class Photo {
       };
     DateAndTimeISO ?: string;
 
-    constructor ( id = null, path?) {
+    constructor ( id : string, path?) {
 
         if (id) {
             this.id = id
@@ -29,7 +28,9 @@ export class Photo {
 
         if (path) {
             this.path = path;
-        };
+        }else {
+            throw "Path non renseigné lors de la création d'une instance Photo" //Peut mieux faire
+        }
         this.metadata = {};
     };
 
@@ -52,6 +53,7 @@ export class Photo {
         this.metadata.DateTimeOriginal = metadata.DateTimeOriginal;
         this.metadata.Latitude = metadata.latitude;
         this.metadata.Longitude = metadata.longitude;
+        this.DateAndTimeISO = metadata.DateTimeOriginal;
     };
 
 }
