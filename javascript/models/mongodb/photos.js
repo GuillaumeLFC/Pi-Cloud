@@ -11,7 +11,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.insertmongo = void 0;
 const connection_1 = require("./connection");
+const photosCollectionName = 'photos';
 const db = connection_1.client.db("photos");
+/**
+ * Crée la collection avec le schema de validation et les indexes pour les photos.
+ * @param collectionName
+ * @returns La collection créer.
+ */
 function createCollection(collectionName) {
     return __awaiter(this, void 0, void 0, function* () {
         const jsonSchema = {
@@ -21,11 +27,18 @@ function createCollection(collectionName) {
                 path: { bsonType: "string" }
             }
         };
-        yield db.createCollection(collectionName, {
+        const collection = yield db.createCollection(collectionName, {
             validator: { $jsonSchema: jsonSchema }
         });
+        return collection;
     });
 }
+;
+/**
+ * Vérifie si la collection entrée en paramètre existe dans la db.
+ * @param collectionName
+ * @returns Boolean
+ */
 function collectionExist(collectionName) {
     return __awaiter(this, void 0, void 0, function* () {
         const collections = yield db.listCollections().toArray();
@@ -34,12 +47,26 @@ function collectionExist(collectionName) {
     });
 }
 ;
-if (!collectionExist('photos')) {
-    createCollection('photos');
+/**
+ * Crée la collection si elle n'existe pas et return la collection dans tous les cas.
+ * @param collectionName Le nom souhaité.
+ * @returns
+ */
+function getCollection(collectionName) {
+    return __awaiter(this, void 0, void 0, function* () {
+        if (!collectionExist(collectionName)) {
+            const collection = yield createCollection(collectionName);
+            return collection;
+        }
+        ;
+        const collection = db.collection(collectionName);
+        return collection;
+    });
 }
-const collection = db.collection('photos');
+;
 function insertmongo(photo) {
     return __awaiter(this, void 0, void 0, function* () {
+        const collection = getCollection(photosCollectionName);
         const document = {
             id: photo.id,
             path: photo.path,

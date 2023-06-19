@@ -23,12 +23,7 @@ class Photo {
             this.id = generateid();
         }
         ;
-        if (path) {
-            this.path = path;
-        }
-        else {
-            throw "Path non renseigné lors de la création d'une instance Photo"; //Peut mieux faire
-        }
+        this.path = path;
         this.metadata = {};
     }
     ;

@@ -18,19 +18,14 @@ export class Photo {
       };
     DateAndTimeISO ?: string;
 
-    constructor ( id : string, path?) {
+    constructor ( id : string, path : string) {
 
         if (id) {
             this.id = id
         } else {
             this.id = generateid()
         };
-
-        if (path) {
-            this.path = path;
-        }else {
-            throw "Path non renseigné lors de la création d'une instance Photo" //Peut mieux faire
-        }
+        this.path = path;
         this.metadata = {};
     };
 
