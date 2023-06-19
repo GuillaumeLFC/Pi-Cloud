@@ -20,17 +20,31 @@ const db = connection_1.client.db("photos");
  */
 function createCollection(collectionName) {
     return __awaiter(this, void 0, void 0, function* () {
-        const jsonSchema = {
-            required: ["_id", "path"],
-            properties: {
-                _id: { bsonType: "string" },
-                path: { bsonType: "string" }
-            }
-        };
         const collection = yield db.createCollection(collectionName, {
-            validator: { $jsonSchema: jsonSchema }
+            validator: { $jsonSchema: {
+                    required: ["_id", "path"],
+                    properties: {
+                        _id: { bsonType: "string" },
+                        path: { bsonType: "string" }
+                    }
+                } }
         });
         return collection;
+    });
+}
+;
+function checkAndCreateIndexes(collection) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const indexesToCreate = [
+            { name: 'DateAndTimeISO', key: { DateAndTimeISO: 1 } },
+        ];
+        const existingIndexes = yield collection.indexes();
+        const existingIndexNames = existingIndexes.map((index) => index.name);
+        const missingIndexes = indexesToCreate.filter((index) => !existingIndexNames.includes(index.name));
+        for (const index of missingIndexes) {
+            yield collection.createIndex(index.key, { name: index.name });
+            console.log(index.name, 'créer !');
+        }
     });
 }
 ;
@@ -43,6 +57,7 @@ function collectionExist(collectionName) {
     return __awaiter(this, void 0, void 0, function* () {
         const collections = yield db.listCollections().toArray();
         const collectionExist = collections.some(collection => collection.name === collectionName);
+        console.log('état collectionExist : ', collectionExist);
         return collectionExist;
     });
 }
@@ -54,19 +69,23 @@ function collectionExist(collectionName) {
  */
 function getCollection(collectionName) {
     return __awaiter(this, void 0, void 0, function* () {
-        if (!collectionExist(collectionName)) {
+        if (!(yield collectionExist(collectionName))) {
+            console.log('On execute le if');
             const collection = yield createCollection(collectionName);
+            yield checkAndCreateIndexes(collection);
             return collection;
         }
         ;
+        console.log('On execute pas le if');
         const collection = db.collection(collectionName);
+        yield checkAndCreateIndexes(collection);
         return collection;
     });
 }
 ;
 function insertmongo(photo) {
     return __awaiter(this, void 0, void 0, function* () {
-        const collection = getCollection(photosCollectionName);
+        const collection = yield getCollection(photosCollectionName);
         const document = {
             id: photo.id,
             path: photo.path,
@@ -74,6 +93,9 @@ function insertmongo(photo) {
             DateAndTimeISO: photo.DateAndTimeISO,
             metadata: photo.metadata,
         };
+        const result = yield collection.insertOne(document);
+        return result;
     });
 }
 exports.insertmongo = insertmongo;
+;

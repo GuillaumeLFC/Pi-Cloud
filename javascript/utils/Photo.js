@@ -12,16 +12,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.generateid = exports.Photo = void 0;
+exports.Photo = void 0;
 const exifr_1 = __importDefault(require("exifr"));
-const photos_1 = require("../models/mongodb/photos");
+const photos_1 = require("./photos");
 class Photo {
     constructor(id, path) {
         if (id) {
             this.id = id;
         }
         else {
-            this.id = generateid();
+            this.id = (0, photos_1.generateid)();
         }
         ;
         this.path = path;
@@ -31,7 +31,7 @@ class Photo {
     extractmetadata(file) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const TagsToExtract = [0x0100, 0x0101, 0x011A, 0x011B, 0x9003, 0x0002, 0x0004, 0x9000];
+                const TagsToExtract = [256, 257, 282, 283, 36867, 2, 4, 36864];
                 const metadata = yield exifr_1.default.parse(file, TagsToExtract);
                 return metadata;
             }
@@ -54,22 +54,5 @@ class Photo {
         this.DateAndTimeISO = metadata.DateTimeOriginal;
     }
     ;
-    insertToMongo() {
-        return __awaiter(this, void 0, void 0, function* () {
-            return yield (0, photos_1.insertmongo)(this);
-        });
-    }
 }
 exports.Photo = Photo;
-function generateid() {
-    const alphanumeric = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    let id = String(Date.now());
-    for (let i = 0; i < 8; i++) {
-        const randomindex = Math.floor(Math.random() * alphanumeric.length);
-        id += alphanumeric.charAt(randomindex);
-    }
-    ;
-    return id;
-}
-exports.generateid = generateid;
-;

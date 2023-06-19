@@ -1,11 +1,10 @@
 import exifr from 'exifr';
+import { insertmongo } from '../models/mongodb/photos';
 
 export class Photo {
     id: string;
     filextension ?: string;
     path : string;
-
-    //Define metadata properties 
     metadata : {
         ImageWidth ?: number;
         ImageHeight ?: number;
@@ -50,7 +49,9 @@ export class Photo {
         this.metadata.Longitude = metadata.longitude;
         this.DateAndTimeISO = metadata.DateTimeOriginal;
     };
-
+    async insertToMongo(){
+        return await insertmongo(this);
+    }
 }
 
 export function generateid() {

@@ -13,21 +13,16 @@ exports.importPhoto = void 0;
 const photos_1 = require("../utils/photos");
 function importPhoto(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        try {
-            for (const file of req.files) {
-                const id = getIDfromfilename(file.filename);
-                const photo = new photos_1.Photo(id, file.path);
-                handlemetadata(photo);
-                photo.filextension = getextension(file.filename);
-            }
-            ;
-            res.send('Photos uploadées');
-        }
-        catch (error) {
-            console.log(error);
-            res.send(error);
+        for (const file of req.files) {
+            const id = getIDfromfilename(file.filename);
+            const photo = new photos_1.Photo(id, file.path);
+            yield handlemetadata(photo);
+            photo.filextension = getextension(file.filename);
+            const result = yield photo.insertToMongo();
+            console.log(result);
         }
         ;
+        res.send('Photos uploadées');
     });
 }
 exports.importPhoto = importPhoto;

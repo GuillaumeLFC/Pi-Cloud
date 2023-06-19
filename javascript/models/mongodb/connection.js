@@ -32,7 +32,7 @@ function run() {
         }
         finally {
             // Ensures that the client will close when you finish/error
-            yield exports.client.close();
+            //await client.close();
         }
     });
 }

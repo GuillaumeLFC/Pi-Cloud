@@ -3,19 +3,17 @@ import { Photo } from "../utils/photos";
 import { Request, Response } from 'express';
 
 export async function importPhoto(req : Request , res : Response) {
-  try {
-    for (const file of req.files){
-      const id : string = getIDfromfilename(file.filename)
-      const photo = new Photo(id, file.path);
-      handlemetadata(photo);
-      photo.filextension = getextension(file.filename); 
-    };
-    res.send('Photos uploadées');
-  } catch (error) {
-    console.log(error);
-    res.send(error);
-  };  
-};
+
+  for (const file of req.files){
+    const id : string = getIDfromfilename(file.filename)
+    const photo = new Photo(id, file.path);
+    await handlemetadata(photo);
+    photo.filextension = getextension(file.filename); 
+    const result = await photo.insertToMongo();
+    console.log(result);
+  };
+  res.send('Photos uploadées');
+};  
 
 async function handlemetadata (photo : Photo) {
     const metadata = await photo.extractmetadata(photo.path);
