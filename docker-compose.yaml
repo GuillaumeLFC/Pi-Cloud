@@ -19,6 +19,12 @@ services:
   mongodb:
     container_name: mongo
     image: mongo:4.4.0
+    healthcheck:
+      test: ["CMD", "mongo", "--eval", "db.adminCommand('ping')"]
+      interval: 5s
+      timeout: 3s
+      retries : 5
+      start_period: 5s
     networks:
       - Pi-Cloud
 

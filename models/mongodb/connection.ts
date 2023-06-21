@@ -18,7 +18,6 @@ async function run() {
     // Connect the client to the server (optional starting in v4.7)
     console.log('on try le connect');
     await client.connect();
-    console.log('on a reussi la ligne 20 !!!')
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log("Connexion à mongoDB réussie !");
@@ -27,11 +26,12 @@ async function run() {
     console.log('on est passés dans le finally')
     // Ensures that the client will close when you finish/error
     await client.close();
+    //console.log("Le client a été fermé :(")
 
   }
 }
 
-export function connectoMongo(){
-    run().catch(console.dir);  
+export async function connectoMongo(){
+    await run().catch(console.dir);  
 }
 

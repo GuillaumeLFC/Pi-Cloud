@@ -8,19 +8,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = __importDefault(require("express"));
-const routes_1 = __importDefault(require("./routes/routes"));
-const waitMongo_1 = require("./waitMongo");
-const connection_1 = require("./models/mongodb/connection");
-function initMongo() {
+exports.waitForMongoDB = void 0;
+const Docker = require('dockerode');
+function waitForMongoDB() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            yield (0, waitMongo_1.waitForMongoDB)();
-            yield (0, connection_1.connectoMongo)();
+            const docker = new Docker({ host: 'tcp://localhost', port: 2375 });
+            const container = docker.getContainer('mongo');
+            while (true) {
+                const { State } = yield container.inspect();
+                if (State.Health && State.Health.Status === 'healthy') {
+                    console.log('Mongo pret ! ');
+                    break;
+                }
+                yield new Promise((resolve) => setTimeout(resolve, 1000)); // Wait for 1 second before checking again
+            }
         }
         catch (error) {
             console.error(error);
@@ -28,11 +31,5 @@ function initMongo() {
         ;
     });
 }
+exports.waitForMongoDB = waitForMongoDB;
 ;
-initMongo();
-const app = (0, express_1.default)();
-app.use(routes_1.default);
-const port = 3000;
-app.listen(port, () => {
-    console.log(`Le serveur tourne sur le port ${port}`);
-});

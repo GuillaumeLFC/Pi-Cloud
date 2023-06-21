@@ -1,8 +1,18 @@
 import express from 'express';
 import routes from './routes/routes';
-
+import { waitForMongoDB } from './waitMongo';
 import { connectoMongo } from './models/mongodb/connection';
-connectoMongo();
+
+async function initMongo () {
+  try {
+    await waitForMongoDB();
+    await connectoMongo();
+  }catch(error) {
+    console.error(error);
+  };
+};
+initMongo();
+
 
 const app = express();
 

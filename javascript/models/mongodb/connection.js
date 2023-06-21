@@ -27,7 +27,6 @@ function run() {
             // Connect the client to the server (optional starting in v4.7)
             console.log('on try le connect');
             yield exports.client.connect();
-            console.log('on a reussi la ligne 20 !!!');
             // Send a ping to confirm a successful connection
             yield exports.client.db("admin").command({ ping: 1 });
             console.log("Connexion à mongoDB réussie !");
@@ -36,10 +35,13 @@ function run() {
             console.log('on est passés dans le finally');
             // Ensures that the client will close when you finish/error
             yield exports.client.close();
+            //console.log("Le client a été fermé :(")
         }
     });
 }
 function connectoMongo() {
-    run().catch(console.dir);
+    return __awaiter(this, void 0, void 0, function* () {
+        yield run().catch(console.dir);
+    });
 }
 exports.connectoMongo = connectoMongo;
