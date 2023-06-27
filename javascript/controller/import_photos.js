@@ -18,8 +18,7 @@ function importPhoto(req, res) {
             const photo = new photos_1.Photo(id, file.path);
             yield handlemetadata(photo);
             photo.filextension = getextension(file.filename);
-            const result = yield photo.insertToMongo();
-            console.log(result);
+            yield photo.insertToMongo();
         }
         ;
         res.send('Photos uploadées');

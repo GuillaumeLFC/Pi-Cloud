@@ -9,8 +9,7 @@ export async function importPhoto(req : Request , res : Response) {
     const photo = new Photo(id, file.path);
     await handlemetadata(photo);
     photo.filextension = getextension(file.filename); 
-    const result = await photo.insertToMongo();
-    console.log(result);
+    await photo.insertToMongo();
   };
   res.send('Photos uploadées');
 };  

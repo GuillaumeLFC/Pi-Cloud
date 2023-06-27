@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.disconnectMongo = exports.connectoMongo = exports.client = void 0;
 const mongodb_1 = require("mongodb");
 // Replace the placeholder with your Atlas connection string
-const uri = "mongodb://mongo";
+const uri = "mongodb://localhost";
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 exports.client = new mongodb_1.MongoClient(uri, {
     serverApi: {
@@ -26,9 +26,11 @@ function connectoMongo() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             // Connect the client to the server (optional starting in v4.7)
+            console.log('On tente le connect');
             yield exports.client.connect();
             // Send a ping to confirm a successful connection
-            yield exports.client.db("admin").command({ ping: 1 });
+            console.log('Connect passé, on envoie un ping');
+            console.log(yield exports.client.db("admin").command({ ping: 1 }));
             console.log("Connexion à mongoDB réussie !");
         }
         catch (error) {
@@ -45,3 +47,18 @@ function disconnectMongo() {
     });
 }
 exports.disconnectMongo = disconnectMongo;
+function main() {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            yield connectoMongo();
+        }
+        catch (error) {
+            console.dir(error);
+        }
+        finally {
+            yield disconnectMongo();
+        }
+    });
+}
+;
+main();

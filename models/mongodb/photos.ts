@@ -1,6 +1,7 @@
-import { MongoClient, Db, Collection, InsertOneResult } from "mongodb";
+import { MongoClient, Db, Collection, InsertOneResult, ObjectId } from "mongodb";
 import { Photo } from "../../utils/photos";
-import { client } from "./connection";
+import { client, disconnectMongo } from "./connection";
+import { connectoMongo } from "./connection";
 
 const photosCollectionName = 'photos';
 const db : Db = client.db("photos");
@@ -11,16 +12,23 @@ const db : Db = client.db("photos");
  * @returns La collection créer.
  */
 async function createCollection(collectionName : string) : Promise<Collection> {
-    const collection : Collection = await db.createCollection(collectionName, {
+    try {
+        console.log('Création de la collection : ', collectionName);
+        const collection : Collection = await db.createCollection(collectionName, {
         validator : { $jsonSchema : {
+            bsonType : 'object',
             required: ["_id", "path"],
             properties: {
-                _id: { bsonType: "string" },
+                _id: { bsonType : 'ObjectId' },
                 path: { bsonType: "string" }
             }
         }}
     });
-    return collection
+    return collection;
+    } catch (error){
+        console.log('Erreur dans le db.create collection : \n', error);
+        throw error;
+    }
 };
 
 async function checkAndCreateIndexes(collection : Collection) : Promise<void> {
@@ -36,7 +44,7 @@ async function checkAndCreateIndexes(collection : Collection) : Promise<void> {
 
     for (const index of missingIndexes) {
         await collection.createIndex(index.key, { name: index.name });
-        console.log(index.name, 'créer !')
+        console.log('Les index " ',index.name, ' " ont bien été créer.');
     }
 };
 
@@ -48,7 +56,7 @@ async function checkAndCreateIndexes(collection : Collection) : Promise<void> {
 async function collectionExist(collectionName : string) : Promise<boolean> {
     const collections = await db.listCollections().toArray();
     const collectionExist : boolean = collections.some(collection => collection.name === collectionName);
-    console.log('état collectionExist : ', collectionExist);
+    console.log(`État collectionExist (${collectionName}) : ${collectionExist}`);
     return collectionExist;
 };
 
@@ -59,26 +67,54 @@ async function collectionExist(collectionName : string) : Promise<boolean> {
  */
 async function getCollection(collectionName:string) : Promise<Collection> {
     if (! await collectionExist(collectionName)) {
-        console.log('On execute le if');
         const collection = await createCollection(collectionName);
         await checkAndCreateIndexes(collection);
         return collection;
     };
-    console.log('On execute pas le if');
     const collection = db.collection(collectionName);
     await checkAndCreateIndexes(collection);
     return collection
 };
 
-export async function insertmongo(photo : Photo): Promise<InsertOneResult> {
-    const collection = await getCollection(photosCollectionName);
-    const document = {
-        id : photo.id,
-        path : photo.path,
-        filextension : photo.filextension,
-        DateAndTimeISO : photo.DateAndTimeISO,
-        metadata : photo.metadata,
-    };
-    const result = await collection.insertOne(document);
-    return result;
+/**
+ * Le document des données d'une photo dans MongoDB
+ */
+interface DocumentPhoto {
+    _id : string | ObjectId,
+    path : string,
+    filextension ?: string,
+    DateAndTimeISO ?: string,
+    metadata ?: {
+        ImageWidth?: number | undefined;
+        ImageHeight?: number | undefined;
+        XResolution?: number | undefined;
+        YResolution?: number | undefined;
+        ExifVersion?: string | undefined;
+        DateTimeOriginal?: string | undefined;
+        Latitude?: number | undefined;
+        Longitude?: number | undefined;
+    }
+};
+
+export async function insertmongo(photo : Photo): Promise<void> {
+    try {
+        await connectoMongo();
+        const collection = await getCollection(photosCollectionName);
+        const id = new ObjectId(photo.id);
+        const document : DocumentPhoto = {
+            _id : photo.id,
+            path : photo.path,
+            filextension : photo.filextension,
+            DateAndTimeISO : photo.DateAndTimeISO,
+            metadata : photo.metadata
+        }
+        console.log(document._id);
+        const result = await collection.insertOne(document);
+        console.log(result);
+    } catch (error) {
+        console.error('Erreur dans le insertmongo : \n', error);
+    } finally {
+        await disconnectMongo();
+    }
+    //return result;
 };

@@ -5,6 +5,7 @@ export class Photo {
     id: string;
     filextension ?: string;
     path : string;
+    DateAndTimeISO : string;
     metadata : {
         ImageWidth ?: number;
         ImageHeight ?: number;
@@ -15,14 +16,18 @@ export class Photo {
         Latitude ?: number;
         Longitude ?: number;
       };
-    DateAndTimeISO ?: string;
 
-    constructor ( id : string, path : string) {
 
+    constructor ( id : string, path : string, DateAndTimeISO ?: string) {
         if (id) {
             this.id = id
         } else {
             this.id = generateid()
+        };
+        if (DateAndTimeISO){
+            this.DateAndTimeISO = DateAndTimeISO;
+        } else {
+            this.DateAndTimeISO = DateAndTimeISO = '';
         };
         this.path = path;
         this.metadata = {};
@@ -54,16 +59,12 @@ export class Photo {
     }
 }
 
-export function generateid() {
-
-    const alphanumeric = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
-    let id = String(Date.now())
-
-    for (let i = 0 ; i < 8 ; i++) {
-        const randomindex = Math.floor(Math.random() * alphanumeric.length);
-        id += alphanumeric.charAt(randomindex); 
+export function generateid() : string {
+    let id = String(Date.now());
+    for (let i = 0 ; i < 11 ; i++) {
+        const randomindex = String(Math.floor(Math.random() * 10));
+        id += randomindex;
     };
-
     return id;
 };
 

@@ -11,26 +11,15 @@ services:
       - mongodb
     networks:
       - Pi-Cloud
-    environment:
-      - MONGODB_HOST=mongodb
     deploy:
       mode: global 
-
-  mongodb:
+  mongodb :
     container_name: mongo
-    image: mongo:4.4.0
-    healthcheck:
-      test: ["CMD", "mongo", "--eval", "db.adminCommand('ping')"]
-      interval: 5s
-      timeout: 3s
-      retries : 5
-      start_period: 5s
+    image: mongo:latest
     networks:
       - Pi-Cloud
 
 networks:
   Pi-Cloud:
     driver: bridge
-    
-volumes:
-  mongoDB:
+
