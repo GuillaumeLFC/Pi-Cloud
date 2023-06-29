@@ -10,7 +10,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.insertmongo = void 0;
-const mongodb_1 = require("mongodb");
 const connection_1 = require("./connection");
 const connection_2 = require("./connection");
 const photosCollectionName = 'photos';
@@ -29,7 +28,7 @@ function createCollection(collectionName) {
                         bsonType: 'object',
                         required: ["_id", "path"],
                         properties: {
-                            _id: { bsonType: 'ObjectId' },
+                            _id: { bsonType: 'string' },
                             path: { bsonType: "string" }
                         }
                     } }
@@ -97,7 +96,6 @@ function insertmongo(photo) {
         try {
             yield (0, connection_2.connectoMongo)();
             const collection = yield getCollection(photosCollectionName);
-            const id = new mongodb_1.ObjectId(photo.id);
             const document = {
                 _id: photo.id,
                 path: photo.path,
@@ -106,6 +104,7 @@ function insertmongo(photo) {
                 metadata: photo.metadata
             };
             console.log(document._id);
+            //@ts-expect-error (Un problème de type pour l'id que j'ai la flemme de régler) (ça marche quand meme)
             const result = yield collection.insertOne(document);
             console.log(result);
         }

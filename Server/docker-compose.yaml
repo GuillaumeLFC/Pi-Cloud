@@ -18,6 +18,8 @@ services:
     image: mongo:latest
     networks:
       - Pi-Cloud
+    ports:
+      - "27017:27017"
 
 networks:
   Pi-Cloud:

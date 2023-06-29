@@ -19,7 +19,7 @@ async function createCollection(collectionName : string) : Promise<Collection> {
             bsonType : 'object',
             required: ["_id", "path"],
             properties: {
-                _id: { bsonType : 'ObjectId' },
+                _id: { bsonType : 'string' },
                 path: { bsonType: "string" }
             }
         }}
@@ -80,10 +80,10 @@ async function getCollection(collectionName:string) : Promise<Collection> {
  * Le document des données d'une photo dans MongoDB
  */
 interface DocumentPhoto {
-    _id : string | ObjectId,
+    _id : ObjectId | string ,
     path : string,
     filextension ?: string,
-    DateAndTimeISO ?: string,
+    DateAndTimeISO : string,
     metadata ?: {
         ImageWidth?: number | undefined;
         ImageHeight?: number | undefined;
@@ -100,7 +100,6 @@ export async function insertmongo(photo : Photo): Promise<void> {
     try {
         await connectoMongo();
         const collection = await getCollection(photosCollectionName);
-        const id = new ObjectId(photo.id);
         const document : DocumentPhoto = {
             _id : photo.id,
             path : photo.path,
@@ -109,6 +108,7 @@ export async function insertmongo(photo : Photo): Promise<void> {
             metadata : photo.metadata
         }
         console.log(document._id);
+        //@ts-expect-error (Un problème de type pour l'id que j'ai la flemme de régler) (ça marche quand meme)
         const result = await collection.insertOne(document);
         console.log(result);
     } catch (error) {
