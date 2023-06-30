@@ -16,8 +16,6 @@ export class Photo {
         Latitude ?: number;
         Longitude ?: number;
       };
-
-
     constructor ( id : string, path : string, DateAndTimeISO ?: string) {
         if (id) {
             this.id = id
