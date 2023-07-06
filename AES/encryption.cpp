@@ -3,6 +3,7 @@
 #include <bitset>
 #include <openssl/rand.h>
 #include <array>
+#include <cmath>
 
 using namespace std;
 
@@ -43,16 +44,29 @@ int initWithOriginalKey32bitsWords(unsigned char key[][4],unsigned char *origina
     return 0;
 }
 
+template <int rconLength>
+int generateRcon(unsigned char (&rcon)[rconLength][4]) {
+    for (int i = 1; i <= rconLength; ++i) {
+        for (int j = 0; j < 4; ++j) {
+            cout << std::pow(2,i-1) <<endl;
+            //rcon[i][j] = static_cast<unsigned char>((2^(i-1)) << (j * 8));
+        }
+    }
+    return 0;
+}
+
 unsigned char* KeyExpansion(unsigned char* originalID){ 
-    int Number32bitWords = keyLenght/32;
+    int Number32bitWords = keyLenght/32;dv
+
+    unsigned char* originalID32Bits = SplitInto32bitWords(originalID, Number32bitWords);
 
     unsigned char keys[numberRoundKeys][Number32bitWords];
-    initWithOriginalKey32bitsWords(keys,originalID,Number32bitWords);
-    
-    for (int i = 1; i < numberRoundKeys; ++i){
+    for (int i = 0; i < numberRoundKeys-1; ++i){
         for (int j = 0; j < Number32bitWords; ++j){
-            if (i%Number32bitWords == 0){
-                keys[i][j] = keys[i-1][j] | 
+            if (i = 0){
+                
+            } else {
+
             }
         }
     }
@@ -63,6 +77,15 @@ int main() {
     unsigned char key[bytesIDLenght];
     if (generateID(key,bytesIDLenght)!=0){
         return 1;
+    }
+    unsigned char rcon[10][4];
+    generateRcon<10>(rcon);
+    cout << "The rcon " << hex << rcon << " : " << endl;
+    for (int i =0; i<=10;++i){
+        for (int j = 0 ; j < 4 ; ++j){
+                cout << rcon[i][j];
+        }
+        cout <<endl;
     }
     return 0;
 }
