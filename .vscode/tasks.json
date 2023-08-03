@@ -2,16 +2,14 @@
     "tasks": [
         {
             "type": "cppbuild",
-            "label": "C/C++: g++ build active file",
-            "command": "/usr/bin/g++",
+            "label": "C/C++: gcc-11 build active file",
+            "command": "/usr/bin/gcc-11",
             "args": [
                 "-fdiagnostics-color=always",
                 "-g",
                 "${file}",
                 "-o",
-                "${fileDirname}/build/${fileBasenameNoExtension}",
-                "-lssl",
-                "-lcrypto",
+                "${fileDirname}/build/${fileBasenameNoExtension}"
             ],
             "options": {
                 "cwd": "${fileDirname}"
