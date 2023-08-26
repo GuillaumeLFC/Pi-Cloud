@@ -1,0 +1,12 @@
+DO $$
+BEGIN 
+	-- Création des utilisateurs
+	IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'Pi_Cloud') THEN 
+		EXECUTE 'CREATE USER "Pi_Cloud" WITH PASSWORD ''Pi_Cloud''';
+	END IF;
+END $$
+
+IF NOT EXISTS (SELECT 1 FROM pg_database WHERE datname = 'Pi-Cloud') THEN
+	-- Create the database "Pi-Cloud"
+	CREATE DATABASE "Pi-Cloud";
+END IF;

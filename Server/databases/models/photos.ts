@@ -1,8 +1,8 @@
 import { Collection, ObjectId, Db } from "mongodb";
 import { Photo } from "../../utils/photos";
 import { connectoMongo, disconnectfromMongo } from "../connection/mongoDB";
-import { db } from "../initialisation/MongoDB/init";
-import { photosCollectionName } from "../initialisation/MongoDB/photos";
+import { db } from "../initialisation/mongoDB/init";
+import { photosCollectionName } from "../initialisation/mongoDB/photos";
 
 /**
  * Le document des données d'une photo dans MongoDB

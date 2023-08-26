@@ -8,27 +8,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = __importDefault(require("express"));
-const routes_1 = __importDefault(require("./routes/routes"));
-const init_1 = require("./databases/initialisation/mongoDB/init");
-function InitDatabases() {
+exports.initMongo = exports.db = exports.databaseName = void 0;
+const photos_1 = require("./photos");
+const mongoDB_1 = require("../../connection/mongoDB");
+exports.databaseName = "Pi-Cloud";
+function initMongo(client) {
     return __awaiter(this, void 0, void 0, function* () {
-        yield (0, init_1.initMongo)();
+        if (!client) {
+            client = mongoDB_1.defaultClient;
+        }
+        yield (0, mongoDB_1.connectoMongo)(client);
+        exports.db = client.db(exports.databaseName);
+        yield (0, photos_1.checkAndValidateMongoPhotosRequirement)(exports.db);
+        yield (0, mongoDB_1.disconnectfromMongo)(client);
     });
 }
-function LaunchServer() {
-    return __awaiter(this, void 0, void 0, function* () {
-        yield InitDatabases();
-        const app = (0, express_1.default)();
-        app.use(routes_1.default);
-        const port = 3000;
-        app.listen(port, () => {
-            console.log(`Le serveur tourne sur le port ${port}`);
-        });
-    });
-}
-LaunchServer();
+exports.initMongo = initMongo;

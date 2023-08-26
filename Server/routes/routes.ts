@@ -21,7 +21,7 @@ const handleMulterError = (err, req, res, next) => {
 };
 
 router.get('/',async (req : Request, res : Response) => {
-    res.send("Serveur en ligne !");
+    res.send("Serveur en ligne !)");
   });
 
 router.post('/', multerUploadPhoto, handleMulterError, (req,res) => {

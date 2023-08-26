@@ -11,8 +11,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.insertMongoPhoto = void 0;
 const mongoDB_1 = require("../connection/mongoDB");
-const init_1 = require("../initialisation/MongoDB/init");
-const photos_1 = require("../initialisation/MongoDB/photos");
+const init_1 = require("../initialisation/mongoDB/init");
+const photos_1 = require("../initialisation/mongoDB/photos");
 ;
 function insertMongoPhoto(photo) {
     return __awaiter(this, void 0, void 0, function* () {

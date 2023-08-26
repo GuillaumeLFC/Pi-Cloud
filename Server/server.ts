@@ -1,12 +1,21 @@
 import express from 'express';
 import routes from './routes/routes';
+import { initMongo } from './databases/initialisation/mongoDB/init';
 
-const app = express();
+async function InitDatabases(){
+  await initMongo();
+}
 
-app.use(routes);
+async function LaunchServer(){
+  await InitDatabases();
+  const app = express();
 
-const port = 3000;
-app.listen(port, () => {
-  console.log(`Le serveur tourne sur le port ${port}`);
-});
+  app.use(routes);
 
+  const port = 3000;
+  app.listen(port, () => {
+    console.log(`Le serveur tourne sur le port ${port}`);
+  });
+}
+
+LaunchServer();

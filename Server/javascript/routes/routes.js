@@ -32,7 +32,7 @@ const handleMulterError = (err, req, res, next) => {
     }
 };
 router.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    res.send("Serveur en ligne !");
+    res.send("Serveur en ligne !)");
 }));
 router.post('/', multerUploadPhoto, handleMulterError, (req, res) => {
     if (req.files) {
